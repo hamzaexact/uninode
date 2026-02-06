@@ -2,27 +2,25 @@
 use std::{cell::RefCell,rc::Rc};
 
 
-
-pub enum Node {
-    Box,
+pub enum NodeId {
+    BoxId(BoxId),
+    ArrowId(Arrow),
 }
 
-pub struct Box<'a> {
-
-    content:    &'a str, // for the moment i'll stick with static strings
-    right:      Option<Rc<RefCell<Node>>>,
-    left:       Option<Rc<RefCell<Node>>>,
-    // I may need to comment this out later
-    // is_root:    bool
-
+pub struct BoxId {
+    content:    String,
+    right:      Option<Rc<RefCell<NodeId>>>,
+    left:       Option<Rc<RefCell<NodeId>>>,
 }
 
-pub struct BoxDimension {
-    height: u16,
-    width: u16,
-    start_x: u16,
-    end_x: u16,
-    start_y: u16,
-    end_y: u16
+pub enum ArrowKind {
+    Left,
+    Right
 }
+pub struct Arrow {
+    parent:  Option<Rc<RefCell<NodeId>>>,
+    dimensions: (usize, usize),
+    kind: Option<ArrowKind>,
+}
+
 
