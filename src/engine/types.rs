@@ -4,23 +4,28 @@ use std::{cell::RefCell,rc::Rc};
 
 pub enum NodeId {
     BoxId(BoxId),
-    ArrowId(Arrow),
+    ArrowId(ArrowId),
 }
 
 pub struct BoxId {
-    content:    String,
-    right:      Option<Rc<RefCell<NodeId>>>,
-    left:       Option<Rc<RefCell<NodeId>>>,
+    pub content:    String,
+    pub right:      Option<Rc<RefCell<NodeId>>>,
+    pub left:       Option<Rc<RefCell<NodeId>>>,
 }
 
 pub enum ArrowKind {
     Left,
     Right
 }
-pub struct Arrow {
-    parent:  Option<Rc<RefCell<NodeId>>>,
-    dimensions: (usize, usize),
-    kind: Option<ArrowKind>,
+pub struct ArrowId {
+    pub parent:  Option<Rc<RefCell<NodeId>>>,
+    pub kind: Option<ArrowKind>,
+}
+
+
+pub struct Area {
+    pub width: usize,
+    pub height: usize
 }
 
 
