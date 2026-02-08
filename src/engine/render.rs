@@ -13,11 +13,14 @@ pub trait Render {
      fn render(&self, arr_parent: Option<Rc<RefCell<NodeId>>>) -> RenderedNode;
 }
 
+
+#[derive(Debug)]
 pub enum RenderedNode {
     Box(Box),
     LinkedArrow(Arrow)
 }
 
+#[derive(Debug)]
 pub struct Box {
     pub content: String,
     pub area: Area,
@@ -27,6 +30,7 @@ pub struct Box {
 }
 
 
+#[derive(Debug)]
 pub struct Arrow {
     pub parent:  Option<Rc<RefCell<NodeId>>>,
     pub kind: Option<ArrowKind>,
@@ -39,7 +43,7 @@ impl Render for NodeId{
     fn render(&self, arr_parent: Option<Rc<RefCell<NodeId>>>) -> RenderedNode {
         match self {
             NodeId::BoxId(box_id) => {
-
+                let k = 1;
                 let mut cell = Table::new();
                 cell.load_preset(ASCII_FULL).set_content_arrangement(ContentArrangement::Dynamic)
                     .add_row(vec![&box_id.content]);

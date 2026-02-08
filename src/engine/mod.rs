@@ -3,6 +3,7 @@ use crate::engine::types::Area;
 pub mod types;
 pub mod render;
 pub mod engine;
+pub mod draw;
 
 pub fn calculate_dimensions(s:&String) -> Area {
     let lines: Vec<String> = s.lines().map(|l| l.to_string()).collect();
