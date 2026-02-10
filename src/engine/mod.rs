@@ -1,11 +1,11 @@
-use crate::engine::types::Area;
+use crate::engine::types::Dimentions;
 
 pub mod types;
 pub mod render;
 pub mod engine;
 pub mod draw;
 
-pub fn calculate_dimensions(s:&String) -> Area {
+pub fn calculate_dimensions(s:&String) -> Dimentions {
     let lines: Vec<String> = s.lines().map(|l| l.to_string()).collect();
     let height = lines.len();
     let width = lines
@@ -13,7 +13,7 @@ pub fn calculate_dimensions(s:&String) -> Area {
         .map(|l| l.len())
         .max()
         .unwrap_or(0);
-    Area {
+    Dimentions {
         width,
         height
     }

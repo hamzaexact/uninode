@@ -1,4 +1,4 @@
-
+use comfy_table::Color::White;
 use crate::engine::engine;
 use crate::engine::render::*;
 
@@ -14,13 +14,14 @@ impl engine::Engine {
     {
         match node {
             RenderedNode::Box(box_node) => {
-                if box_node.col.unwrap() + box_node.area.width > engine_buffer[0].len()
+                if box_node.col.unwrap() + box_node.dimentions.width > engine_buffer[0].len()
                 {
-                    println!("ENGINE BUFFER[0] LENGHT {},  {}", engine_buffer[0].len(), box_node.area.width + box_node.col.unwrap());
+                    println!("ENGINE BUFFER[0] LENGHT {},  {}", engine_buffer[0].len(), box_node.dimentions.width + box_node.col.unwrap());
                     panic!("BUFFER  __OVERFLOW")
                 }
-                if box_node.area.height + box_node.row.unwrap() > engine_buffer.len() {
-                    println!("ENGINE BUFFER LENGHT {},  {}", engine_buffer.len(), box_node.area.height + box_node.row.unwrap());
+                // if node.get
+                if box_node.dimentions.height + box_node.row.unwrap() > engine_buffer.len() {
+                    println!("ENGINE BUFFER LENGHT {},  {}", engine_buffer.len(), box_node.dimentions.height + box_node.row.unwrap());
                     panic!("BUFFER  OVERFLOW")
                 }
                 for (outer_index ,line) in box_node.content.lines().enumerate() {
@@ -31,7 +32,15 @@ impl engine::Engine {
                     }
                 }
             }
-            _ => todo!()
+            RenderedNode::LinkedArrow(arrow) => {
+                for (outer_index ,line) in arrow.arrow_string.lines().enumerate() {
+                    let current_row = arrow.row.unwrap() + outer_index;
+                    for (inner_index, ch) in line.chars().enumerate() {
+                        let current_col = arrow.col.unwrap() + inner_index;
+                        engine_buffer[current_row][current_col] = ch;
+                    }
+                }
+            }
         }
     }
     // fn write_to_engine_string(engine_buffer: &mut Vec<Vec<char>>, string: &mut String, node: &RenderedNode) {
