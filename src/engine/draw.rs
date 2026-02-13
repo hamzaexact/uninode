@@ -11,6 +11,7 @@ impl engine::Engine {
             self.max_x = max(self.max_x, node.get_position().col + node.get_length());
             self.max_y = max(self.max_y, node.get_position().row + node.get_dimentions().height);
         }
+        dbg!(&self.cells);
     }
 
     fn write_to_eninge_buffer(engine_buffer: &mut Vec<Vec<char>>, node: &RenderedNode)

@@ -91,8 +91,8 @@ pub struct Box {
     pub dimentions: Dimentions,
     pub row: Option<usize>,
     pub col: Option<usize>,
-    pub left_arrow: Option<Arrow>,
-    pub right_arrow: Option<Arrow>
+    pub left_neighbor: Option<usize>,
+    pub right_neighbor: Option<usize>
 }
 
 
@@ -123,8 +123,8 @@ impl Render for NodeId {
                     dimentions: area,
                     row: None,
                     col: None,
-                    left_arrow: None,
-                    right_arrow: None
+                    left_neighbor: None,
+                    right_neighbor: None
                 };
                 return RenderedNode::Box(rendered_box);
             }
