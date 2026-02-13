@@ -1,12 +1,15 @@
+use std::cmp::max;
+use std::collections::HashMap;
 use comfy_table::Color::White;
 use crate::engine::engine;
 use crate::engine::render::*;
 
 impl engine::Engine {
     pub fn draw(&mut self) {
-        for node in self.nodes.iter() {
+        for (_, node) in self.cells.iter() {
             engine::Engine::write_to_eninge_buffer(&mut self.buffer, node);
-            
+            self.max_x = max(self.max_x, node.get_position().col + node.get_length());
+            self.max_y = max(self.max_y, node.get_position().row + node.get_dimentions().height);
         }
     }
 
@@ -14,16 +17,6 @@ impl engine::Engine {
     {
         match node {
             RenderedNode::Box(box_node) => {
-                if box_node.col.unwrap() + box_node.dimentions.width > engine_buffer[0].len()
-                {
-                    println!("ENGINE BUFFER[0] LENGHT {},  {}", engine_buffer[0].len(), box_node.dimentions.width + box_node.col.unwrap());
-                    panic!("BUFFER  __OVERFLOW")
-                }
-                // if node.get
-                if box_node.dimentions.height + box_node.row.unwrap() > engine_buffer.len() {
-                    println!("ENGINE BUFFER LENGHT {},  {}", engine_buffer.len(), box_node.dimentions.height + box_node.row.unwrap());
-                    panic!("BUFFER  OVERFLOW")
-                }
                 for (outer_index ,line) in box_node.content.lines().enumerate() {
                     let current_row = box_node.row.unwrap() + outer_index;
                     for (inner_index, ch) in line.chars().enumerate() {
@@ -46,3 +39,4 @@ impl engine::Engine {
     // fn write_to_engine_string(engine_buffer: &mut Vec<Vec<char>>, string: &mut String, node: &RenderedNode) {
     // }
 }
+

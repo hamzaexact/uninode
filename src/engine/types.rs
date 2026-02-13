@@ -24,7 +24,8 @@ pub struct BoxId {
 #[derive(Debug, Clone)]
 pub enum ArrowKind {
     Left,
-    Right
+    Right,
+    None
 }
 #[derive(Debug, Clone)]
 pub struct ArrowId {
@@ -34,6 +35,7 @@ pub struct ArrowId {
     pub kind: ArrowKind,
     pub has_head: bool
 }
+
 
 #[derive(Debug, Clone)]
 pub struct Dimentions {
@@ -65,5 +67,16 @@ impl ArrowId {
             has_head
         })
     }
-}
+    pub fn default() -> NodeId {
+        NodeId::ArrowId(
+            Self {
+                length: Some(7),
+                with_offset:true,
+                parent: None,
+                kind: ArrowKind::None,
+                has_head: false
+            }
+        )
 
+    }
+}

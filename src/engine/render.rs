@@ -1,6 +1,7 @@
 #![allow(warnings)]
 
 use std::{cell::RefCell, rc::Rc};
+use std::cmp::min;
 use std::fmt::format;
 use comfy_table::{presets::ASCII_FULL, ContentArrangement, Table};
 use comfy_table::Color::White;
@@ -8,7 +9,7 @@ use crossterm::event::KeyCode::PageDown;
 use super::{calculate_dimensions, types::{NodeId, ArrowId, ArrowKind, BoxId, Dimentions}, engine::DEFAULT_ARROW_LENTGH};
 
 pub trait Render {
-     fn render(&mut self, arr_parent: Option<&RenderedNode>) -> RenderedNode;
+    fn render(&mut self,row: Option<usize>, height: Option<usize>, other_height: Option<usize>, col: Option<usize>) -> RenderedNode;
 }
 
 
@@ -65,6 +66,19 @@ impl RenderedNode {
             }
         }
     }
+
+
+    pub fn set_row(&mut self,row:usize) {
+        match self {
+            RenderedNode::Box(box_node) => {
+                box_node.row = Some(row);
+            }
+            RenderedNode::LinkedArrow(arrow) => {
+                arrow.row = Some(row);
+            }
+
+        }
+    }
     }
 
 
@@ -92,14 +106,10 @@ pub struct Arrow {
     pub kind: ArrowKind,
     pub col: Option<usize>,
     pub length: usize,
-    // if true
-    // [space][OPTIONtail][arrow][OPTIONhead][space]
-    // if not
-    // [tail][arrow][head]
 }
 
 impl Render for NodeId {
-    fn render(&mut self, arr_parent: Option<&RenderedNode>) -> RenderedNode {
+    fn render(&mut self, row: Option<usize>,height: Option<usize>, col: Option<usize>,  other_height: Option<usize>) -> RenderedNode {
         match self {
             NodeId::BoxId(box_id) => {
                 let k = 1;
@@ -119,6 +129,7 @@ impl Render for NodeId {
                 return RenderedNode::Box(rendered_box);
             }
             NodeId::ArrowId(arrow) => {
+                // let arrow_id_len = Default
                 if arrow.length.is_none() {
                     arrow.length = Some(DEFAULT_ARROW_LENTGH)
                 }
@@ -161,20 +172,15 @@ impl Render for NodeId {
                         counter += 1;
                     }
 
-                    dbg!(&arrow_buffer);
+                    // dbg!(&arrow_buffer);
 
                     arrow_buffer.concat()
                 };
-                // RenderedNode::LinkedArrow();
-                let parent = arr_parent.unwrap();
-                // let arrow_col =
-                // let arrow_row =
                 let arrow_len = arrow_as_string.len();
-                // println!("{}",parent.get_length());
                 let new_arrow = Arrow {
                     arrow_string: arrow_as_string,
-                    col: Some(parent.get_dimentions().width  + parent.get_position().col),
-                    row: Some(parent.get_position().row + parent.get_dimentions().height / 2),
+                    col,
+                    row: Some(row.unwrap() + (min(height.unwrap(), other_height.unwrap()) / 2)),
                     kind: arrow.kind.clone(),
                     length: arrow_len
                 };
@@ -183,8 +189,6 @@ impl Render for NodeId {
         }
     }
 }
-
-
 
 
 
